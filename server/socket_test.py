@@ -37,17 +37,19 @@ class socket_test:
      
     print ("the socket has successfully connected to google on port == %s" %(host_ip))
     '''
-    host_ip='192.168.1.38'
+    host_ip='192.168.1.178'
     port=12345
+    global s
+    
+    def __init__(self):
+        try:
+            self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            print("Socket successfully created")
+        except socket.error as err:
+            print("socket creation failed with error %s" %(err))
 
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print("Socket successfully created")
-    except socket.error as err:
-        print("socket creation failed with error %s" %(err))
-
-    def connect():
-        s.connect((host_ip, port))
+    def connect(self):
+        self.s.connect((self.host_ip, self.port))
         print("the socket has successfully connected to %s on port %s" %(host_ip,port))
         print("this raspberry ip ",socket.gethostbyname(socket.gethostname()))
         #s.send(("try to connect").encode('utf-8'))
@@ -63,9 +65,10 @@ class socket_test:
 
 
 # main
-connect()
-send("1","2212")
-send("2","1432")
+so=socket_test()
+so.connect()
+so.send("1","2212")
+so.send("2","1432")
 
 '''
 s.send((packet.encoding_package(
