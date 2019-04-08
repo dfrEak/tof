@@ -46,9 +46,11 @@ tof.open()
 GPIO.output(pin, GPIO.LOW)
 
 while True:
+    #start = time.time()
     pin = toggle_pin(pin)
     GPIO.output(pin, GPIO.HIGH)
     get_and_print_measurement()
     GPIO.output(pin, GPIO.LOW)
     sleep(0.05)
+    #print("1 loop tooks %f" % (time.time()-start))
 
