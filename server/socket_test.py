@@ -64,11 +64,12 @@ class socket_test:
         print("packet xshut=%s range=%s sent" %(xshut,range))
 
 
-# main
-so=socket_test()
-so.connect()
-so.send("1","2212")
-so.send("2","1432")
+######################################################
+if __name__ == "__main__":
+    so=socket_test()
+    so.connect()
+    so.send("1","2212")
+    so.send("2","1432")
 
 '''
 s.send((packet.encoding_package(
