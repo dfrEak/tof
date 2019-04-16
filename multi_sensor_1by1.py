@@ -13,9 +13,15 @@ def get_and_print_measurement():
     # Start ranging, 1 = Short Range, 2 = Medium Range, 3 = Long Range
     start = time.time()
     tof.start_ranging(3)
+    time1=time.time()-start
+    start= time.time()
     distance_in_mm = tof.get_distance()
+    time2=time.time()-start
+    start= time.time()
     tof.stop_ranging()
-    print("sensor on pin: %d\tvalue: %d\ttime: %f" % (pin, distance_in_mm,time.time()-start) )
+    time3=time.time()-start
+    print("sensor on pin: %d\tvalue: %d\tstart: %f\tread: %f\tstop: %f" % (pin, distance_in_mm,time1,time2,time3) )
+    #print("sensor on pin: %d\tvalue: %d\ttime: %f" % (pin, distance_in_mm,time.time()-start) )
 
 def toggle_pin(pin):
     if pin == SHUTX_PIN_2:
@@ -51,6 +57,6 @@ while True:
     GPIO.output(pin, GPIO.HIGH)
     get_and_print_measurement()
     GPIO.output(pin, GPIO.LOW)
-    sleep(0.05)
+    sleep(0.005)
     #print("1 loop tooks %f" % (time.time()-start))
 
