@@ -50,7 +50,7 @@ class socket_test:
 
     def connect(self):
         self.s.connect((self.host_ip, self.port))
-        print("the socket has successfully connected to %s on port %s" %(host_ip,port))
+        print("the socket has successfully connected to %s on port %s" %(self.host_ip,self.port))
         print("this raspberry ip ",socket.gethostbyname(socket.gethostname()))
         #s.send(("try to connect").encode('utf-8'))
 
