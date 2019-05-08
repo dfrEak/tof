@@ -8,7 +8,7 @@ import sys
 
 # local file
 import packet
-sys.path.append('../')
+sys.path.append('..')
 from db_mysql.db_connector import db_connector
 from string_table import str_parser
 

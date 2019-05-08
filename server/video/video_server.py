@@ -31,7 +31,8 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
 
         while(True):
             try:
-                stream_bytes += self.rfile.read(1024)
+                #stream_bytes += self.rfile.read(1024)
+                stream_bytes += self.rfile.read(IMAGE_SIZE)
                 print(len(stream_bytes))
                 while len(stream_bytes) >= IMAGE_SIZE:
                     print("get data")
@@ -63,9 +64,9 @@ class Self_Driver_Server:
         server.serve_forever()
 
     def start(self):
-        ultrasonic_thread = threading.Thread(target=self.startUltrasonicServer)
-        ultrasonic_thread.daemon = True
-        ultrasonic_thread.start()
+        #ultrasonic_thread = threading.Thread(target=self.startUltrasonicServer)
+        #ultrasonic_thread.daemon = True
+        #ultrasonic_thread.start()
         self.startVideoServer()
 
 
