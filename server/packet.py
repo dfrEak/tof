@@ -1,9 +1,9 @@
 import json
 import sys
+sys.path.append('../')
 
 class packet:
     # local file
-    sys.path.append('../')
     from string_table import str_parser
 
     def encoding_package(ip,xshut,range):

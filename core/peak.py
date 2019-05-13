@@ -1,84 +1,110 @@
 import numpy as np
 
+
 class peak:
-  '''
-  # first(lag) window
-  sumSetup = -1
-  avgSetup = -1
-  stdSetup = -1
-  '''
 
-  #moving filter
-  #avgFilter=-1
-  #stdFilter=-1
-  filteredWindow=[]
+    def __init__(self, setupCount=10, threshold=5, influence=0.1):
+        print("peak init")
+        '''
+        # first(lag) window
+        sumSetup = -1
+        avgSetup = -1
+        stdSetup = -1
+        '''
 
-  #parameter
-  threshold=5
-  influence=0.1
-  stat=0
+        # moving filter
+        self.avgFilter=-1
+        # stdFilter=-1
+        self.filteredWindow = []
 
-  def __init__(self, threshold, influence):
-    self.threshold=threshold
-    self.influence=influence
+        # parameter
+        self.setupCount = setupCount
+        self.threshold = threshold
+        self.influence = influence
+        self.stat = 0
 
-  def __init__(self, threshold, influence, filteredWindow):
-    self.threshold = threshold
-    self.influence = influence
-    self.filteredWindow = filteredWindow
+    def setFilteredWindow(self, filteredWindow):
+        self.filteredWindow = filteredWindow
 
-  def addSignalSetup(self, newData):
-    self.filteredWindow.append(newData)
+    def setSetupCount(self, setupCount):
+        self.setupCount = setupCount
 
-  def addSignal(self, newData):
-    #remove first
-    del self.filteredWindow[0]
-    #add last
-    self.filteredWindow.append(newData)
+    def setThreshold(self, threshold):
+        self.threshold = threshold
 
-  '''
-  def calculateAvgStd(self, first):
-    self.sumFilter = np.sum(self.filteredWindow)
-    self.avgFilter = np.average(self.filteredWindow)
-    self.stdFilter = np.std(self.filteredWindow)
-  '''
+    def setInfluence(self, influence):
+        self.influence = influence
 
-  def calculateStatus(self, range):
-    #https://stackoverflow.com/questions/22583391/peak-signal-detection-in-realtime-timeseries-data
-    #with some modifications
-    sumFilter = np.sum(self.filteredWindow)
-    avgFilter = np.average(self.filteredWindow)
-    stdFilter = np.std(self.filteredWindow)
+    def getAvgFilter(self):
+        self.avgFilter = np.average(self.filteredWindow)
+        return self.avgFilter
 
-    retval=0
+    def getStat(self):
+        return self.stat
 
-    if (abs(range - avgFilter) > self.threshold*stdFilter):
-      if(range > avgFilter):
-        retval = 1
-        #print("Signal +1")
-      else:
-        retval = -1
-        #print("Signal -1")
-      pdFiltered = self.influence*range + (1-self.influence)*self.filteredWindow[len(self.filteredWindow)-1]
-      self.addSignal(pdFiltered)
-    else: #stream data not change that much
-      retval = 0
-      self.addSignal(range)
-      #print("Signal 0")
+    def addSignal(self, newData):
+        #print("add signal")
+        if (self.isReady()):  # check whether already full
+            # remove first
+            del self.filteredWindow[0]
 
-    return(retval)
+        # add last
+        self.filteredWindow.append(newData)
 
-  def checkStability(self, range):
-    newStat = calculateStatus(range)
-    if (self.stat!=0 and newStat==0):
-      self.stat = newStat
-      return True
-    else:
-      self.stat = newStat
-      return False
+    def isReady(self):
+        if (len(self.filteredWindow) > self.setupCount):  # check whether already full
+            return True
+        else:
+            return False
+
+    '''
+    def calculateAvgStd(self, first):
+      self.sumFilter = np.sum(self.filteredWindow)
+      self.avgFilter = np.average(self.filteredWindow)
+      self.stdFilter = np.std(self.filteredWindow)
+    '''
+
+    def calculateStatus(self, range):
+        # https://stackoverflow.com/questions/22583391/peak-signal-detection-in-realtime-timeseries-data
+        # with some modifications
+        sumFilter = np.sum(self.filteredWindow)
+        avgFilter = np.average(self.filteredWindow)
+        stdFilter = np.std(self.filteredWindow)
+
+        retval = 0
+
+        if (abs(range - avgFilter) > self.threshold * stdFilter):
+            if (range > avgFilter):
+                retval = 1
+                # print("Signal +1")
+            else:
+                retval = -1
+                # print("Signal -1")
+            pdFiltered = self.influence * range + (1 - self.influence) * self.filteredWindow[
+                len(self.filteredWindow) - 1]
+            self.addSignal(pdFiltered)
+        else:  # stream data not change that much
+            retval = 0
+            self.addSignal(range)
+            # print("Signal 0")
+
+        # save the average
+        self.avgFilter = avgFilter
+        return (retval)
+
+    def checkStability(self, range):
+        newStat = calculateStatus(range)
+        if (self.stat != 0 and newStat == 0):
+            self.stat = newStat
+            return True
+        else:
+            self.stat = newStat
+            return False
 
 
 if __name__ == "__main__":
-  pk = peak(5,0.1,[5,4,5,6,5,4,4,5,6,6,6,7,4,5,4])
-  print(pk.calculateStatus(10))
-
+    pk = peak()
+    print(pk.getAvgFilter())
+    pk.setFilteredWindow([5, 4, 5, 6, 5, 4, 4, 5, 6, 6, 6, 7, 4, 5, 4])
+    print(pk.calculateStatus(10))
+    print(pk.getAvgFilter())

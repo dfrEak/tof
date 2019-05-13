@@ -3,16 +3,14 @@ from datetime import datetime
 
 class db_connector:
 
-    host="192.168.1.178"
-    user="tof"
-    passwd="tof"
-    database="tof"
-
     global mydb
     global mycursor
 
-    def __init__(self):
-        pass
+    def __init__(self, host="192.168.1.178", user="tof", passwd="tof", database="tof"):
+        self.host=host
+        self.user=user
+        self.passwd=passwd
+        self.database=database
 
     def dbConnect(self):
         self.mydb = mysql.connector.connect(
