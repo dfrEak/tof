@@ -45,13 +45,13 @@ class sensor1by1:
         self.tof.start_ranging(3)
         #time1=time.time()-start
         #start= time.time()
-        distance_in_mm = tof.get_distance()
+        distance_in_mm = self.tof.get_distance()
         #time2=time.time()-start
         #start= time.time()
         self.tof.stop_ranging()
         #time3=time.time()-start
         #print("sensor on pin: %d\tvalue: %d\tstart: %f\tread: %f\tstop: %f" % (pin, distance_in_mm,time1,time2,time3) )
-        print("sensor on pin: %d\tvalue: %d\ttime: %f" % (pin, distance_in_mm,time.time()-start) )
+        print("sensor on pin: %d\tvalue: %d\ttime: %f" % (self.pin, distance_in_mm,time.time()-start) )
 
         # add to counter
         result = -1
@@ -73,10 +73,10 @@ class sensor1by1:
 
     def reading(self):
         # start = time.time()
-        self.pin = self.toggle_pin(pin)
+        self.pin = self.toggle_pin(self.pin)
         GPIO.output(self.pin, GPIO.HIGH)
         self.get_and_print_measurement()
-        GPIO.output(pin, GPIO.LOW)
+        GPIO.output(self.pin, GPIO.LOW)
         sleep(0.005)
         # print("1 loop tooks %f" % (time.time()-start))
 

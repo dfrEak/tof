@@ -1,4 +1,4 @@
-from numba.cuda import selp
+#from numba.cuda import selp
 from peak import peak
 
 class counter:
@@ -35,7 +35,10 @@ class counter:
         '''
 
     def checkInLimit(self, sensor):
-        if (self.sensorList[sensor].getAvgFilter() >= self.lowerLimit) and (self.sensorList[sensor].getAvgFilter() <= self.upperLimit):
+        # using avg
+        #if (self.sensorList[sensor].getAvgFilter() >= self.lowerLimit) and (self.sensorList[sensor].getAvgFilter() <= self.upperLimit):
+        # using real range
+        if (self.sensorList[sensor].getLastData() >= self.lowerLimit) and (self.sensorList[sensor].getLastData() <= self.upperLimit):
         #if (self.peak1.getAvgFilter() >= self.lowerLimit) and (self.peak2.getAvgFilter() <= self.upperLimit):
             return True
         else:
@@ -58,6 +61,7 @@ class counter:
         self.addSignal(sensor, range)
         if (self.sensorList[len(self.sensorList)-1].isReady()):
             if (self.detectedStat == 1):
+                print("detected")
                 if (not self.checkInLimit(sensor)): # if sensor not in limit
                     retval = (1-sensor) # in case of 2 sensors
         # update detection stat

@@ -38,6 +38,15 @@ class peak:
     def getAvgFilter(self):
         self.avgFilter = np.average(self.filteredWindow)
         return self.avgFilter
+    
+    def getData(self,n):
+        return self.filteredWindow[n]
+    
+    def getLastData(self):
+        if(len(self.filteredWindow)!=0):
+            return self.filteredWindow[len(self.filteredWindow)-1]
+        else:
+            return -1
 
     def getStat(self):
         return self.stat
