@@ -10,11 +10,15 @@ class counter:
         self.upperLimit = upperLimit
         self.lowerLimit = lowerLimit
 
+        # list of sensors
         self.sensorList = []
         for x in range(sensorNum):
             self.sensorList.append(peak())
         #peak1 = peak()
         #peak2 = peak()
+
+        # detected status
+        self.detectedStat = 0
 
 
     def addSignal(self, sensor, range):
@@ -30,7 +34,6 @@ class counter:
             print("add "+str(range)+" to peak2")
         '''
 
-
     def checkInLimit(self, sensor):
         if (self.sensorList[sensor].getAvgFilter() >= self.lowerLimit) and (self.sensorList[sensor].getAvgFilter() <= self.upperLimit):
         #if (self.peak1.getAvgFilter() >= self.lowerLimit) and (self.peak2.getAvgFilter() <= self.upperLimit):
@@ -38,20 +41,40 @@ class counter:
         else:
             return False
 
-    def checkDetection(self):
-        if (True):
-            return True
+    def checkDetection(self): # return -1 when object detected in every sensors
+        for x in range(len(self.sensorList)):
+            if (not self.checkInLimit(x)):
+                return False
+        return True
+
+    def updateDetectionStat(self):
+        if (self.checkDetection()): # detected: all sensors in limit
+            self.detectedStat = 1
         else:
-            return False
+            self.detectedStat = 0
+
+    def checkMovement_add(self, sensor, range):
+        retval = -1
+        self.addSignal(sensor, range)
+        if (self.sensorList[len(self.sensorList)-1].isReady()):
+            if (self.detectedStat == 1):
+                if (not self.checkInLimit(sensor)): # if sensor not in limit
+                    retval = (1-sensor) # in case of 2 sensors
+        # update detection stat
+        self.updateDetectionStat()
+        return retval
 
 if __name__ == "__main__":
     co = counter()
-    co.addSignal(0,22)
+    co.addSignal(0,555)
     co.addSignal(1,503)
     print(co.checkInLimit(0))
     print(co.checkInLimit(1))
     print(co.sensorList)
     print(co.checkDetection())
+    print(co.checkMovement_add(0,520))
+    print(co.checkMovement_add(1,500))
+    print(co.checkMovement_add(0,300))
 
     '''
     co = counter()
