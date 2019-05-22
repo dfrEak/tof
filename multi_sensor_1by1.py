@@ -38,20 +38,23 @@ class sensor1by1:
 
         #counter
         self.c = counter()
+        
+        #set timing budget and intermeasurement period
+        self.tof.set_timing(33000,33)
 
     def get_and_print_measurement(self):
         # Start ranging, 1 = Short Range, 2 = Medium Range, 3 = Long Range
         start = time.time()
         self.tof.start_ranging(3)
-        #time1=time.time()-start
-        #start= time.time()
+        time1=time.time()-start
+        start= time.time()
         distance_in_mm = self.tof.get_distance()
-        #time2=time.time()-start
-        #start= time.time()
+        time2=time.time()-start
+        start= time.time()
         self.tof.stop_ranging()
-        #time3=time.time()-start
-        #print("sensor on pin: %d\tvalue: %d\tstart: %f\tread: %f\tstop: %f" % (pin, distance_in_mm,time1,time2,time3) )
-        print("sensor on pin: %d\tvalue: %d\ttime: %f" % (self.pin, distance_in_mm,time.time()-start) )
+        time3=time.time()-start
+        print("sensor on pin: %d\tvalue: %d\tstart: %f\tread: %f\tstop: %f" % (self.pin, distance_in_mm,time1,time2,time3) )
+        #print("sensor on pin: %d\tvalue: %d\ttime: %f" % (self.pin, distance_in_mm,time.time()-start) )
 
         # add to counter
         result = -1
