@@ -12,13 +12,19 @@ class counter:
 
         # list of sensors
         self.sensorList = []
+        self.counter = []
         for x in range(sensorNum):
             self.sensorList.append(peak())
+            # counter
+            self.counter.append(0)
         #peak1 = peak()
         #peak2 = peak()
 
         # detected status
         self.detectedStat = 0
+
+
+
 
 
     def addSignal(self, sensor, range):
@@ -66,6 +72,12 @@ class counter:
                     retval = (1-sensor) # in case of 2 sensors
         # update detection stat
         self.updateDetectionStat()
+
+        # add counter
+        if (retval == 0):
+            self.counter[0]+=1
+        elif (retval == 1):
+            self.counter[1]+=1
         return retval
 
 if __name__ == "__main__":
