@@ -37,11 +37,16 @@ class sensor1by1:
         self.tof.open()
         GPIO.output(self.pin, GPIO.LOW)
 
-        #counter
+        # counter
         self.c = counter()
         
-        #set timing budget and intermeasurement period
-        self.tof.set_timing(33000,33)
+        # set timing budget and intermeasurement period
+        self.tof.set_timing(20000,21)
+        #self.tof.set_timing(33000,34)
+        
+		# save pin --- HARDCODED
+        self.pin1=0
+        self.pin2=0
 
     def get_and_print_measurement(self):
         # Start ranging, 1 = Short Range, 2 = Medium Range, 3 = Long Range
@@ -55,14 +60,18 @@ class sensor1by1:
         self.tof.stop_ranging()
         #time3=time.time()-start
         #print("sensor on pin: %d\tvalue: %d\tstart: %f\tread: %f\tstop: %f" % (self.pin, distance_in_mm,time1,time2,time3) )
-        print("sensor on pin: %d\tvalue: %d\ttime: %f" % (self.pin, distance_in_mm,time.time()-start) )
-
+		#print("sensor on pin: %d\tvalue: %d\ttime: %f" % (self.pin, distance_in_mm,time.time()-start) )
+		
         # add to counter
         result = -1
         if (self.pin == self.SHUTX_PIN_1):
             result = self.c.checkMovement_add(0,distance_in_mm)
+            self.pin1=distance_in_mm
         else:
             result = self.c.checkMovement_add(1,distance_in_mm)
+            self.pin2=distance_in_mm
+
+        print("sensor1 %d\tsensor2 %d") % (self.pin1, self.pin2)
 
         if (result != -1):
             print("detected object to "+str(result))
