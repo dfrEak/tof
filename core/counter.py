@@ -23,8 +23,8 @@ class counter:
 
     def addSignal(self, sensor, range):
         self.sensorList[sensor].addSignal(range)
-        print("add " + str(range) + " to peak" + str(sensor))
-        print(self.sensorList[sensor].filteredWindow)
+        #print("add " + str(range) + " to peak" + str(sensor))
+        #print(self.sensorList[sensor].filteredWindow)
         '''
         if (sensor == 1):
             self.peak1.addSignal(range)
