@@ -1,9 +1,11 @@
 import numpy as np
+import configparser
 
 
 class peak:
 
-    def __init__(self, setupCount=10, threshold=5, influence=0.1):
+    #def __init__(self, setupCount=10, threshold=5, influence=0.1):
+    def __init__(self):
         print("peak init")
         '''
         # first(lag) window
@@ -18,9 +20,15 @@ class peak:
         self.filteredWindow = []
 
         # parameter
-        self.setupCount = setupCount
-        self.threshold = threshold
-        self.influence = influence
+        config = configparser.ConfigParser()
+        config.read('../conf.ini')
+        self.setupCount = float(config['PEAK']['SETUP_COUNT'])
+        self.threshold = float(config['PEAK']['THRESHOLD'])
+        self.influence = float(config['PEAK']['INFLUENCE'])
+
+        #self.setupCount = setupCount
+        #self.threshold = threshold
+        #self.influence = influence
         self.stat = 0
 
     def setFilteredWindow(self, filteredWindow):
@@ -113,7 +121,6 @@ class peak:
 
 if __name__ == "__main__":
     pk = peak()
-    print(pk.getAvgFilter())
     pk.setFilteredWindow([5, 4, 5, 6, 5, 4, 4, 5, 6, 6, 6, 7, 4, 5, 4])
     print(pk.calculateStatus(10))
     print(pk.getAvgFilter())

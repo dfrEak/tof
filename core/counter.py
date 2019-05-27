@@ -62,7 +62,7 @@ class counter:
         else:
             self.detectedStat = 0
 
-    def checkMovement_add(self, sensor, range):
+    def checkMovementAdd(self, sensor, range):
         retval = -1
         self.addSignal(sensor, range)
         if (self.sensorList[len(self.sensorList)-1].isReady()):
@@ -88,9 +88,9 @@ if __name__ == "__main__":
     print(co.checkInLimit(1))
     print(co.sensorList)
     print(co.checkDetection())
-    print(co.checkMovement_add(0,520))
-    print(co.checkMovement_add(1,500))
-    print(co.checkMovement_add(0,300))
+    print(co.checkMovementAdd(0, 520))
+    print(co.checkMovementAdd(1, 500))
+    print(co.checkMovementAdd(0, 300))
 
     '''
     co = counter()

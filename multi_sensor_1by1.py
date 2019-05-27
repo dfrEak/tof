@@ -65,10 +65,10 @@ class sensor1by1:
         # add to counter
         result = -1
         if (self.pin == self.SHUTX_PIN_1):
-            result = self.c.checkMovement_add(0,distance_in_mm)
+            result = self.c.checkMovementAdd(0, distance_in_mm)
             self.pin1=distance_in_mm
         else:
-            result = self.c.checkMovement_add(1,distance_in_mm)
+            result = self.c.checkMovementAdd(1, distance_in_mm)
             self.pin2=distance_in_mm
 
         print("sensor1 %d\tsensor2 %d") % (self.pin1, self.pin2)
