@@ -1,7 +1,7 @@
 #ref: https://www.baldengineer.com/mqtt-tutorial.html
 
 import sys
-sys.path.append('../')
+sys.path.append('../../')
 import paho.mqtt.publish as publish
 import time
 import configparser
@@ -70,3 +70,4 @@ if __name__ == "__main__":
     t=m.generateMessage(["123", "456", "789"])
     print(t)
     print(m.degenerateMessage(t))
+    print(m.generateTopic())
