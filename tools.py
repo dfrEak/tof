@@ -4,7 +4,8 @@ class tools:
 
     def __init__(self):
         pass
-
+    
+    @staticmethod
     def getEthName():
         # Get name of the Ethernet interface
         try:
@@ -15,9 +16,11 @@ class tools:
         except:
             interface = "None"
         return interface
-
-    def getMAC(interface='eth0'):
+    
+    @staticmethod
+    def getMAC(interface='wlan0'):
         # Return the MAC address of the specified interface
+        # interface = eth0 or wlan0
         try:
             str = open('/sys/class/net/%s/address' % interface).read()
         except:
@@ -25,7 +28,6 @@ class tools:
         return str[0:17]
 
 if __name__ == "__main__":
-    t=tools()
-    print(t.getEthName())
-    print(t.getMAC('eth0'))
-    print(t.getMAC('wlan0'))
+    print(tools.getEthName())
+    print(tools.getMAC('eth0'))
+    print(tools.getMAC('wlan0'))
