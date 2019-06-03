@@ -1,4 +1,4 @@
-
+# ref: https://www.raspberrypi-spy.co.uk/2012/06/finding-the-mac-address-of-a-raspberry-pi/
 
 class tools:
 
