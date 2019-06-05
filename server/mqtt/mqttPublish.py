@@ -58,11 +58,15 @@ class mqttPublish:
         return retval
 
 if __name__ == "__main__":
+    # parameter
+    config = configparser.ConfigParser()
+    config.read('../../conf.ini')
+    hostname = config['MQTT']['hostname']
     print("Sending 0...")
-    publish.single("debug", "0", hostname="localhost")
+    publish.single("debug", "0", hostname=hostname)
     time.sleep(1)
     print("Sending 1...")
-    publish.single("debug", "1", hostname="localhost")
+    publish.single("debug", "1", hostname=hostname)
 
     m=mqttPublish()
     m.send("lalalaa")
