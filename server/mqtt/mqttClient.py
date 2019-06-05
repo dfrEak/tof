@@ -70,4 +70,9 @@ class mqttClient:
 
 
 if __name__ == "__main__":
-    m=mqttClient("debug")
+    # test
+    #m=mqttClient("debug")
+
+    # use real topic
+    topic1 = "b8:27:eb:c7:cc:12/1/TOF"
+    m = mqttClient(topic1)

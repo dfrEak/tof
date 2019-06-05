@@ -5,6 +5,7 @@ sys.path.append('../../')
 import paho.mqtt.publish as publish
 import time
 import configparser
+#from datetime import datetime
 
 from tools import tools
 
@@ -41,11 +42,13 @@ class mqttPublish:
         retval = mac + self.topicSeparator + self.topicSensorNo + self.topicSeparator + self.topicSensorName
         return retval
 
-
-
     def generateMessage(self, range, separator=" "):
         # format message <range><separator>....<separator><range>
         retval = ""
+
+        # add timestamp
+        #retval += str(datetime.timestamp(datetime.now())) + " "
+
         for x in range:
             retval+=x
             retval+=separator
@@ -56,6 +59,7 @@ class mqttPublish:
     def degenerateMessage(self, message, separator=" "):
         retval = message.split(separator)
         return retval
+
 
 if __name__ == "__main__":
     # parameter
@@ -75,3 +79,7 @@ if __name__ == "__main__":
     print(t)
     print(m.degenerateMessage(t))
     print(m.generateTopic())
+
+    # using real topic
+    m.defaultTopic=False
+    m.send(m.generateMessage(range=["123", "456", "789"],separator=" "))
