@@ -21,7 +21,8 @@ class peak:
 
         # parameter
         config = configparser.ConfigParser()
-        config.read('../conf.ini')
+        #config.read('../conf.ini')
+        config.read('conf.ini')
         self.setupCount = float(config['PEAK']['SETUP_COUNT'])
         self.threshold = float(config['PEAK']['THRESHOLD'])
         self.influence = float(config['PEAK']['INFLUENCE'])

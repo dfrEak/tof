@@ -1,5 +1,5 @@
 #from numba.cuda import selp
-from peak import peak
+from .peak import peak
 
 class counter:
 
