@@ -23,3 +23,8 @@ class config:
 
 if __name__ == "__main__":
     print(config.config['PEAK']['THRESHOLD'])
+    print(config.config['SENSORS']['SHUTX_PIN'])
+    print(type(config.config['SENSORS']['SHUTX_PIN']))
+
+    import json
+    print(json.loads(config.config['SENSORS']['SHUTX_PIN']))
