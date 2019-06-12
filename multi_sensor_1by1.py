@@ -2,14 +2,14 @@
 #https://github.com/pimoroni/vl53l1x-python
 #dropbox link: https://www.dropbox.com/sh/97run5rykuicl66/AAA9jkZRS9MHY9Xd3o_SKF-aa?dl=0
 
-#import VL53L1X
-#import RPi.GPIO as GPIO
+import VL53L1X
+import RPi.GPIO as GPIO
 from time import sleep
 import time
 from core.counter import counter
 
 # import config
-from .config import config
+from config import config
 import json
 
 
@@ -29,13 +29,13 @@ class sensor1by1:
         GPIO.setmode(GPIO.BCM)
         #GPIO.setup(self.SHUTX_PIN_1, GPIO.OUT)
         #GPIO.setup(self.SHUTX_PIN_2, GPIO.OUT)
-        for i in range(len(self.SHUTX_PIN))
+        for i in range(len(self.SHUTX_PIN)):
             GPIO.setup(self.SHUTX_PIN[i], GPIO.OUT)
 
         # Set all shutdown pins low to turn off each VL53L0X
         #GPIO.output(self.SHUTX_PIN_1, GPIO.LOW)
         #GPIO.output(self.SHUTX_PIN_2, GPIO.LOW)
-        for i in range(len(self.SHUTX_PIN))
+        for i in range(len(self.SHUTX_PIN)):
             GPIO.output(self.SHUTX_PIN[i], GPIO.LOW)
         sleep(1)
 
@@ -61,9 +61,9 @@ class sensor1by1:
         # save pin
         #self.pin1=0
         #self.pin2=0
-        self.pin=[]
-        for i in range(len(self.SHUTX_PIN))
-            self.pin.append(0)
+        self.pinInfo=[0] * len(self.SHUTX_PIN)
+        #for i in range(len(self.SHUTX_PIN)):
+        #    self.pin.append(0)
 
 
     def get_and_print_measurement(self):
@@ -78,7 +78,7 @@ class sensor1by1:
         self.tof.stop_ranging()
         #time3=time.time()-start
         #print("sensor on pin: %d\tvalue: %d\tstart: %f\tread: %f\tstop: %f" % (self.pin, distance_in_mm,time1,time2,time3) )
-        print("sensor on pin: %d\tvalue: %d\ttime: %f" % (self.pin, distance_in_mm,time.time()-start) )
+        #print("sensor on pin: %d\tvalue: %d\ttime: %f" % (self.pin, distance_in_mm,time.time()-start) )
         
         # add to counter
         result = -1
@@ -94,11 +94,11 @@ class sensor1by1:
         '''
         result = self.c.checkMovementAdd(self.iPin, distance_in_mm)
         # save data to var
-        self.pin[self.iPin]=distance_in_mm
+        self.pinInfo[self.iPin]=distance_in_mm
         # print all sensors data
         strTemp=""
-        for i in range(len(self.SHUTX_PIN))
-            strTemp += "sensor"+self.iPin+": "+self.pin[self.iPin]+"\t"
+        for i in range(len(self.SHUTX_PIN)):
+            strTemp += "sensor"+str(i+1)+": "+str(self.pinInfo[i])+"\t"
         print(strTemp)
 
         if (result != -1):
