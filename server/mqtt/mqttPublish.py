@@ -1,7 +1,10 @@
 #ref: https://www.baldengineer.com/mqtt-tutorial.html
 
+# import config
 import sys
 sys.path.append('../../')
+from config import config
+
 import paho.mqtt.publish as publish
 import time
 import configparser
@@ -12,19 +15,15 @@ from tools import tools
 class mqttPublish:
     def __init__(self):
         # parameter
-        config = configparser.ConfigParser()
-        config.read('../../conf.ini')
-        self.hostname = config['MQTT']['hostname']
-        self.topicSeparator = config['MQTT']['topic_separator']
-        self.topicSensorNo = config['MQTT']['topic_sensor_number']
-        self.topicSensorName = config['MQTT']['topic_sensor_name']
-        self.messageSeparator = config['MQTT']['message_separator']
+        self.hostname = config.config['MQTT']['hostname']
+        self.topicSeparator = config.config['MQTT']['topic_separator']
+        self.topicSensorNo = config.config['MQTT']['topic_sensor_number']
+        self.topicSensorName = config.config['MQTT']['topic_sensor_name']
+        self.messageSeparator = config.config['MQTT']['message_separator']
 
         # generate topic name
         self.defaultTopic = True
         self.topic = "debug"
-
-
 
     def send(self, message):
         if(self.defaultTopic):

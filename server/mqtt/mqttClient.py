@@ -1,21 +1,23 @@
 #ref: https://www.baldengineer.com/mqtt-tutorial.html
 #http://www.steves-internet-guide.com/into-mqtt-python-client/
 
+# import config
+import sys
+sys.path.append('../../')
+from config import config
+
 import paho.mqtt.client as mqtt
-import configparser
-import threading
+#import threading
 
 class mqttClient:
 
     def __init__(self, topic):
         # parameter
-        config = configparser.ConfigParser()
-        config.read('../../conf.ini')
-        self.hostname = config['MQTT']['hostname']
+        self.hostname = config.config['MQTT']['hostname']
 
         # file settings
-        self.fileSet = config['MQTT']['save_file']
-        self.fileName = config['MQTT']['save_file_name']
+        self.fileSet = config.config['MQTT']['save_file']
+        self.fileName = config.config['MQTT']['save_file_name']
 
         # update topic
         self.topic = topic
@@ -46,7 +48,7 @@ class mqttClient:
         # Subscribing in on_connect() means that if we lose the connection and
         # reconnect then subscriptions will be renewed.
         #client.subscribe("$SYS/#")
-        print(self.topic)
+        #print(self.topic)
         client.subscribe(self.topic)
 
     # The callback for when a PUBLISH message is received from the server.
@@ -71,7 +73,7 @@ class mqttClient:
         print("save")
         # a for append only
         # a+ for append, read
-        print(fileName)
+        #print(fileName)
         self.fileHandler = open(fileName+".txt","a+")
         self.fileHandler.write(message+"\n")
         # for printing, can use flush/close too
@@ -83,6 +85,8 @@ class mqttClient:
 if __name__ == "__main__":
     # test
     #m1=mqttClient("debug")
+
+    print(config.config['MQTT']['hostname'])
 
     # use real topic
     topic1 = "b8:27:eb:c7:cc:12/1/TOF"

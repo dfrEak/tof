@@ -1,6 +1,9 @@
-import numpy as np
-import configparser
+# import config
+import sys
+sys.path.append('../../')
+from config import config
 
+import numpy as np
 
 class peak:
 
@@ -20,12 +23,9 @@ class peak:
         self.filteredWindow = []
 
         # parameter
-        config = configparser.ConfigParser()
-        #config.read('../conf.ini')
-        config.read('conf.ini')
-        self.setupCount = float(config['PEAK']['SETUP_COUNT'])
-        self.threshold = float(config['PEAK']['THRESHOLD'])
-        self.influence = float(config['PEAK']['INFLUENCE'])
+        self.setupCount = float(config.config['PEAK']['SETUP_COUNT'])
+        self.threshold = float(config.config['PEAK']['THRESHOLD'])
+        self.influence = float(config.config['PEAK']['INFLUENCE'])
 
         #self.setupCount = setupCount
         #self.threshold = threshold
