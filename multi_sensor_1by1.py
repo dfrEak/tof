@@ -64,11 +64,13 @@ class sensor1by1:
         self.pinInfo=[0] * len(self.SHUTX_PIN)
         #for i in range(len(self.SHUTX_PIN)):
         #    self.pin.append(0)
+        self.start = time.time()
 
 
     def get_and_print_measurement(self):
         # Start ranging, 1 = Short Range, 2 = Medium Range, 3 = Long Range
-        start = time.time()
+        if(self.iPin==0):
+            self.start = time.time()
         self.tof.start_ranging(3)
         #time1=time.time()-start
         #start= time.time()
@@ -96,11 +98,13 @@ class sensor1by1:
         result = self.c.checkMovementAdd(self.iPin, distance_in_mm)
         # save data to var
         self.pinInfo[self.iPin]=distance_in_mm
-        # print all sensors data
-        strTemp=""
-        for i in range(len(self.SHUTX_PIN)):
-            strTemp += "sensor"+str(i+1)+": "+str(self.pinInfo[i])+"\t"
-        print(strTemp)
+        # print all sensors data, after update all sensors
+        if(self.iPin==len(self.SHUTX_PIN)-1):
+            strTemp=""
+            for i in range(len(self.SHUTX_PIN)):
+                strTemp += "sensor"+str(i+1)+": "+str(self.pinInfo[i])+"\t"
+            strTemp+="time: "+str(time.time()-self.start)
+            print(strTemp)
 
         if (result != -1):
             print("detected object to "+str(result))
