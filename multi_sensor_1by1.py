@@ -92,7 +92,8 @@ class sensor1by1:
 
         #print("sensor1 %d\tsensor2 %d") % (self.pin1, self.pin2)
         '''
-        result = self.c.checkMovementAdd(self.iPin, distance_in_mm)
+        #bug in counter add signal
+        #result = self.c.checkMovementAdd(self.iPin, distance_in_mm)
         # save data to var
         self.pinInfo[self.iPin]=distance_in_mm
         # print all sensors data
