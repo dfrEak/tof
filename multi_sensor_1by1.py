@@ -21,8 +21,8 @@ class sensor1by1:
         self.SHUTX_PIN = json.loads(config.config['SENSORS']['SHUTX_PIN'])
         print(self.SHUTX_PIN)
 
-        self.SHUTX_PIN_1 = 20
-        self.SHUTX_PIN_2 = 16
+        #self.SHUTX_PIN_1 = 20
+        #self.SHUTX_PIN_2 = 16
         GPIO.setwarnings(False)
 
         # Setup GPIO for shutdown pins on each VL53L0X
@@ -51,7 +51,7 @@ class sensor1by1:
         GPIO.output(self.pin, GPIO.LOW)
 
         # counter
-        self.c = counter()
+        self.c = counter(sensorNum=len(self.SHUTX_PIN))
         
         # set timing budget and intermeasurement period
         #self.tof.set_timing(20000,21)
@@ -93,7 +93,7 @@ class sensor1by1:
         #print("sensor1 %d\tsensor2 %d") % (self.pin1, self.pin2)
         '''
         #bug in counter add signal
-        #result = self.c.checkMovementAdd(self.iPin, distance_in_mm)
+        result = self.c.checkMovementAdd(self.iPin, distance_in_mm)
         # save data to var
         self.pinInfo[self.iPin]=distance_in_mm
         # print all sensors data
