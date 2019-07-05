@@ -22,7 +22,7 @@ class mqttPublish:
         self.messageSeparator = config.config['MQTT']['message_separator']
 
         # generate topic name
-        self.defaultTopic = True
+        self.defaultTopic = int(config.config['MQTT']['topic_default'])
         self.topic = "debug"
 
     def send(self, message):

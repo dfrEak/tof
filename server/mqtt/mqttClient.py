@@ -53,6 +53,7 @@ class mqttClient:
         #print(self.topic)
         client.subscribe(self.topic)
         print(self.fileFolder)
+        print(self.fileSet)
 
     # The callback for when a PUBLISH message is received from the server.
     def on_message(self, client, userdata, msg):
@@ -62,6 +63,7 @@ class mqttClient:
         if(self.fileSet=="1"): # from conf.ini
             self.saveMessage(self.fileName, msg.payload.decode())
         elif(self.fileSet=="2"):
+            print("fileset=2")
             self.saveMessage(msg.topic.replace(":","").replace("/","_"), msg.payload.decode())
 
 
@@ -76,8 +78,8 @@ class mqttClient:
         print("save")
         # a for append only
         # a+ for append, read
-        #print(fileName)
-        self.fileHandler = open(self.fileFolder / fileName+".txt","a+")
+        print(self.fileFolder / (fileName+".txt"))
+        self.fileHandler = open(self.fileFolder / (fileName+".txt"),"a+")
         self.fileHandler.write(message+"\n")
         # for printing, can use flush/close too
         #self.fileHandler.flush()
