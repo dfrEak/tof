@@ -49,7 +49,7 @@ class mqttPublish:
         #retval += str(datetime.timestamp(datetime.now())) + " "
 
         for x in range:
-            retval+=x
+            retval+=str(x)
             retval+=separator
         # delete last space
         retval = retval[:-1]

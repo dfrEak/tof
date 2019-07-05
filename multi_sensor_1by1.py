@@ -12,6 +12,9 @@ from core.counter import counter
 from config import config
 import json
 
+#import server
+from server.mqtt.mqttPublish import mqttPublish
+
 
 class sensor1by1:
 
@@ -20,6 +23,10 @@ class sensor1by1:
         #parameter
         self.SHUTX_PIN = json.loads(config.config['SENSORS']['SHUTX_PIN'])
         print(self.SHUTX_PIN)
+        self.serverStat = int(config.config['MQTT']['SERVER'])
+        
+        #sending server
+        self.server = mqttPublish()
 
         #self.SHUTX_PIN_1 = 20
         #self.SHUTX_PIN_2 = 16
@@ -41,7 +48,7 @@ class sensor1by1:
 
         # Start with first sensor
         #self.pin = self.SHUTX_PIN_1
-        self.iPin = 0
+        self.iPin = len(self.SHUTX_PIN)-1   #start from last one
         self.pin = self.SHUTX_PIN[self.iPin]
         GPIO.output(self.pin, GPIO.HIGH)
 
@@ -55,8 +62,9 @@ class sensor1by1:
         
         # set timing budget and intermeasurement period
         #self.tof.set_timing(20000,21)
-        #self.tof.set_timing(33000,34)
-        self.tof.set_timing(140000,141)
+        self.tof.set_timing(33000,34)
+        #self.tof.set_timing(60000,61)
+        #self.tof.set_timing(140000,141)
         
         # save pin
         #self.pin1=0
@@ -102,9 +110,13 @@ class sensor1by1:
         if(self.iPin==len(self.SHUTX_PIN)-1):
             strTemp=""
             for i in range(len(self.SHUTX_PIN)):
-                strTemp += "sensor"+str(i+1)+": "+str(self.pinInfo[i])+"\t"
-            strTemp+="time: "+str(time.time()-self.start)
+                #strTemp += "sensor"+str(i+1)+": "+str(self.pinInfo[i])+"\t"
+                strTemp += str(self.pinInfo[i])+"\t"
+            #strTemp+="time: "+str(time.time()-self.start)
+            strTemp+=str(time.time()-self.start)
             print(strTemp)
+            if(self.serverStat==1):
+                self.server.send(self.server.generateMessage(self.pinInfo))
 
         if (result != -1):
             print("detected object to "+str(result))
