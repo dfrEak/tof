@@ -5,6 +5,7 @@
 import sys
 sys.path.append('../../')
 from config import config
+from pathlib import Path
 
 import paho.mqtt.client as mqtt
 #import threading
@@ -17,9 +18,10 @@ class mqttClient:
 
         # file settings
         self.fileSet = config.config['MQTT']['save_file']
+        self.fileFolder = Path(config.config['MQTT']['save_file_folder'])
         self.fileName = config.config['MQTT']['save_file_name']
 
-        # update topic
+        # update topicasd
         self.topic = topic
 
         # initialize the mqtt client
@@ -50,6 +52,7 @@ class mqttClient:
         #client.subscribe("$SYS/#")
         #print(self.topic)
         client.subscribe(self.topic)
+        print(self.fileFolder)
 
     # The callback for when a PUBLISH message is received from the server.
     def on_message(self, client, userdata, msg):
@@ -74,7 +77,7 @@ class mqttClient:
         # a for append only
         # a+ for append, read
         #print(fileName)
-        self.fileHandler = open(fileName+".txt","a+")
+        self.fileHandler = open(self.fileFolder / fileName+".txt","a+")
         self.fileHandler.write(message+"\n")
         # for printing, can use flush/close too
         #self.fileHandler.flush()
