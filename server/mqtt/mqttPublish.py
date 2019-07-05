@@ -32,7 +32,7 @@ class mqttPublish:
         else:
             # using formating topic
             publish.single(self.generateTopic(), message, hostname=self.hostname)
-        print("send "+message)
+        #print("send "+message)
 
     def generateTopic(self):
         # format topic <mac address>/<sensor no>/<sensor name>
