@@ -8,6 +8,7 @@ from config import config
 from pathlib import Path
 import os
 import time
+import datetime
 
 import paho.mqtt.client as mqtt
 #import threading
@@ -89,8 +90,10 @@ class mqttClient:
         self.fileHandler = open((self.fileFolder / (fileName+".txt")).as_posix(),"a+")
         #self.fileHandler = open((fileName+".txt"),"a+")
 
-        if(self.saveTime):
+        if(self.saveTime==1):
             message=str(time.time())+"\t"+message
+        elif(self.saveTime==2):
+            message=str(datetime.datetime.now())+"\t"+message
 
         self.fileHandler.write(message+"\n")
         # for printing, can use flush/close too
