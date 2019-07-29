@@ -69,6 +69,8 @@ class mqttClient:
             self.saveMessage(self.fileName, msg.payload.decode())
         elif(self.fileSet=="2"):
             self.saveMessage(msg.topic.replace(":","").replace("/","_"), msg.payload.decode())
+        elif(self.fileSet=="3"):
+            self.saveMessage(msg.topic.replace(":","").replace("/","_") +"_"+ datetime.date.today().strftime("%Y%m%d"), msg.payload.decode())
 
 
     def start(self):
@@ -93,7 +95,7 @@ class mqttClient:
         if(self.saveTime==1):
             message=str(time.time())+"\t"+message
         elif(self.saveTime==2):
-            message=str(datetime.datetime.now())+"\t"+message
+            message=str(datetime.datetime.now().strftime("%H:%M:%S.%f"))+"\t"+message
 
         self.fileHandler.write(message+"\n")
         # for printing, can use flush/close too
