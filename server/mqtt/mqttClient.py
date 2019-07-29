@@ -6,13 +6,16 @@ import sys
 sys.path.append('../../')
 from config import config
 from pathlib import Path
+import os
+import time
+import datetime
 
 import paho.mqtt.client as mqtt
 #import threading
 
 class mqttClient:
 
-    def __init__(self, topic):
+    def __init__(self, topic="debug"):
         # parameter
         self.hostname = config.config['MQTT']['hostname']
 
@@ -20,6 +23,8 @@ class mqttClient:
         self.fileSet = config.config['MQTT']['save_file']
         self.fileFolder = Path(config.config['MQTT']['save_file_folder'])
         self.fileName = config.config['MQTT']['save_file_name']
+        self.saveTime = int(config.config['MQTT']['save_time'])
+        self.maxFileSize = int(config.config['MQTT']['max_file_size'])
 
         # update topicasd
         self.topic = topic
@@ -52,8 +57,8 @@ class mqttClient:
         #client.subscribe("$SYS/#")
         #print(self.topic)
         client.subscribe(self.topic)
-        print(self.fileFolder)
-        print(self.fileSet)
+        #print(self.fileFolder)
+        #print(self.fileSet)
 
     # The callback for when a PUBLISH message is received from the server.
     def on_message(self, client, userdata, msg):
@@ -63,7 +68,6 @@ class mqttClient:
         if(self.fileSet=="1"): # from conf.ini
             self.saveMessage(self.fileName, msg.payload.decode())
         elif(self.fileSet=="2"):
-            print("fileset=2")
             self.saveMessage(msg.topic.replace(":","").replace("/","_"), msg.payload.decode())
 
 
@@ -75,15 +79,33 @@ class mqttClient:
 
     # writing to file
     def saveMessage(self, fileName, message):
-        print("save")
+        #print("save")
         # a for append only
         # a+ for append, read
-        print(self.fileFolder / (fileName+".txt"))
-        self.fileHandler = open(self.fileFolder / (fileName+".txt"),"a+")
+        #print(self.fileFolder / (fileName+".txt"))
+
+        # checking file size
+        self.checkFile((self.fileFolder / (fileName+".txt")).as_posix())
+
+        self.fileHandler = open((self.fileFolder / (fileName+".txt")).as_posix(),"a+")
+        #self.fileHandler = open((fileName+".txt"),"a+")
+
+        if(self.saveTime==1):
+            message=str(time.time())+"\t"+message
+        elif(self.saveTime==2):
+            message=str(datetime.datetime.now())+"\t"+message
+
         self.fileHandler.write(message+"\n")
         # for printing, can use flush/close too
         #self.fileHandler.flush()
         self.fileHandler.close()
+
+    def checkFile(self,filePath):
+
+        if(os.path.isfile(filePath)):
+            #if more than max file size in MB
+            if(os.path.getsize(filePath)>(self.maxFileSize*1024*1024)):
+                os.rename(filePath,filePath[:-4]+"_"+str(int(time.time()))+".txt")
 
 
 
@@ -97,6 +119,8 @@ if __name__ == "__main__":
     topic1 = "b8:27:eb:c7:cc:12/1/TOF"
     #m = mqttClient(topic1)
 
+    # checking file size
+    #print(os.path.getsize("C:\\Users\\eric\\Dropbox\\s2\\thesis\\rashberry pi\\people detection\\server\\mqtt\\debug.txt"))
 
     # multi topic
     m = mqttClient([("debug",1),(topic1,1)])

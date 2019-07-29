@@ -33,7 +33,7 @@ class mqttPublish:
             else:
                 # using formating topic
                 publish.single(self.generateTopic(), message, hostname=self.hostname)
-            print("send "+message)
+            #print("send "+message)
         except:
             print("failed sending message")
 
