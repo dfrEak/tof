@@ -26,13 +26,16 @@ class mqttPublish:
         self.topic = "debug"
 
     def send(self, message):
-        if(self.defaultTopic):
-            # default topic for testing
-            publish.single(self.topic, message, hostname=self.hostname)
-        else:
-            # using formating topic
-            publish.single(self.generateTopic(), message, hostname=self.hostname)
-        print("send "+message)
+        try:
+            if(self.defaultTopic):
+                # default topic for testing
+                publish.single(self.topic, message, hostname=self.hostname)
+            else:
+                # using formating topic
+                publish.single(self.generateTopic(), message, hostname=self.hostname)
+            print("send "+message)
+        except:
+            print("failed sending message")
 
     def generateTopic(self):
         # format topic <mac address>/<sensor no>/<sensor name>
