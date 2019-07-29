@@ -110,7 +110,6 @@ class mqttClient:
                 os.rename(filePath,filePath[:-4]+"_"+str(int(time.time()))+".txt")
 
 
-
 if __name__ == "__main__":
     # test
     #m1=mqttClient("debug")
