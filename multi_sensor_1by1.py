@@ -58,7 +58,7 @@ class sensor1by1:
         GPIO.output(self.pin, GPIO.LOW)
 
         # counter
-        self.c = counter(sensorNum=len(self.SHUTX_PIN))
+        #self.c = counter(sensorNum=len(self.SHUTX_PIN))
         
         # set timing budget and intermeasurement period
         #self.tof.set_timing(20000,21)
@@ -103,7 +103,8 @@ class sensor1by1:
         #print("sensor1 %d\tsensor2 %d") % (self.pin1, self.pin2)
         '''
         #bug in counter add signal
-        result = self.c.checkMovementAdd(self.iPin, distance_in_mm)
+        #result = self.c.checkMovementAdd(self.iPin, distance_in_mm)
+
         # save data to var
         self.pinInfo[self.iPin]=distance_in_mm
         # print all sensors data, after update all sensors
@@ -118,8 +119,8 @@ class sensor1by1:
             if(self.serverStat==1):
                 self.server.send(self.server.generateMessage(self.pinInfo))
 
-        if (result != -1):
-            print("detected object to "+str(result))
+        #if (result != -1):
+        #    print("detected object to "+str(result))
 
 
 
