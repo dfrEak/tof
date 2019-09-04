@@ -33,8 +33,9 @@ time.sleep(1)
 GPIO.output(SHUTX_PIN_1, GPIO.HIGH)
 time.sleep(0.2) # delay 200ms
 #tof1 = VL53L1X.VL53L1X(i2c_bus=1, i2c_address=0x29)
-tof1 = VL53L1X.VL53L1X()
-tof1.change_address(0x22)
+#tof1 = VL53L1X.VL53L1X()
+tof1 = VL53L1X.VL53L1X(i2c_bus=1, i2c_address=0x22)
+#tof1.change_address(0x22)
 tof1.open() # Initialise the i2c bus and configure the sensor
 GPIO.output(SHUTX_PIN_1, GPIO.LOW)
 
@@ -42,7 +43,8 @@ GPIO.output(SHUTX_PIN_1, GPIO.LOW)
 GPIO.output(SHUTX_PIN_2, GPIO.HIGH)
 time.sleep(0.2) # delay 200ms
 #tof2 = VL53L1X.VL53L1X(i2c_bus=1, i2c_address=0x28)
-tof2 = VL53L1X.VL53L1X()
+#tof2 = VL53L1X.VL53L1X()
+tof2 = VL53L1X.VL53L1X(i2c_bus=1, i2c_address=0x28)
 #tof2.change_address(0x32)
 tof2.open() # Initialise the i2c bus and configure the sensor
 GPIO.output(SHUTX_PIN_2, GPIO.LOW)

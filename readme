@@ -1,0 +1,5 @@
+python3 multi_sensor_1by1.py
+
+pip install git+https://github.com/pimoroni/vl53l1x-python.git@address-change-fix
+
+pip install git+https://github.com/pimoroni/vl53l1x-python.git@set-timings
