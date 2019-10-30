@@ -119,7 +119,7 @@ class sensor1by1:
             #strTemp+="time: "+str(time.time()-self.start)
             strTemp+=str(time.time()-self.start)
             print(strTemp)
-            if self.serverStat==1 and cThreshold > 0:
+            if self.serverStat==1 and cThreshold < len(self.SHUTX_PIN):
                 self.server.send(self.server.generateMessage(self.pinInfo))
 
         #if (result != -1):
