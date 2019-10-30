@@ -114,7 +114,7 @@ class sensor1by1:
             for i in range(len(self.SHUTX_PIN)):
                 #strTemp += "sensor"+str(i+1)+": "+str(self.pinInfo[i])+"\t"
                 strTemp += str(self.pinInfo[i])+"\t"
-                if self.pinInfo[i] <= self.sensorThreshold:
+                if self.pinInfo[i] > self.sensorThreshold:
                     cThreshold += 1
             #strTemp+="time: "+str(time.time()-self.start)
             strTemp+=str(time.time()-self.start)
