@@ -24,13 +24,14 @@ class sensor1by1:
         self.SHUTX_PIN = json.loads(config.config['SENSORS']['SHUTX_PIN'])
         print(self.SHUTX_PIN)
         self.serverStat = int(config.config['MQTT']['SERVER'])
+        self.sensorThreshold = int(config.config['MQTT']['SENSOR_THRESHOLD'])
         
         #sending server
         self.server = mqttPublish()
 
         #self.SHUTX_PIN_1 = 20
         #self.SHUTX_PIN_2 = 16
-        GPIO.setwarnings(False)
+        GPIO.setwarnings(False)\
 
         # Setup GPIO for shutdown pins on each VL53L0X
         GPIO.setmode(GPIO.BCM)
@@ -104,19 +105,21 @@ class sensor1by1:
         '''
         #bug in counter add signal
         #result = self.c.checkMovementAdd(self.iPin, distance_in_mm)
-
         # save data to var
         self.pinInfo[self.iPin]=distance_in_mm
         # print all sensors data, after update all sensors
         if(self.iPin==len(self.SHUTX_PIN)-1):
             strTemp=""
+            cThreshold=0
             for i in range(len(self.SHUTX_PIN)):
                 #strTemp += "sensor"+str(i+1)+": "+str(self.pinInfo[i])+"\t"
                 strTemp += str(self.pinInfo[i])+"\t"
+                if self.pinInfo[i] <= self.sensorThreshold:
+                    cThreshold += 1
             #strTemp+="time: "+str(time.time()-self.start)
             strTemp+=str(time.time()-self.start)
             print(strTemp)
-            if(self.serverStat==1):
+            if self.serverStat==1 and cThreshold > 0:
                 self.server.send(self.server.generateMessage(self.pinInfo))
 
         #if (result != -1):

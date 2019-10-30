@@ -10,6 +10,7 @@ import os
 import time
 import datetime
 
+
 import paho.mqtt.client as mqtt
 #import threading
 
@@ -25,6 +26,7 @@ class mqttClient:
         self.fileName = config.config['MQTT']['save_file_name']
         self.saveTime = int(config.config['MQTT']['save_time'])
         self.maxFileSize = int(config.config['MQTT']['max_file_size'])
+        self.sendByte = config.config['MQTT']['send_as_byte']
 
         # update topicasd
         self.topic = topic
@@ -47,6 +49,7 @@ class mqttClient:
     def __del__(self):
         print("destructor")
         #self.fileHandler.close()
+        self.client.disconnect()
 
     # The callback for when the client receives a CONNACK response from the server.
     def on_connect(self, client, userdata, flags, rc):
@@ -63,14 +66,13 @@ class mqttClient:
     # The callback for when a PUBLISH message is received from the server.
     def on_message(self, client, userdata, msg):
         print(msg.topic+" "+str(msg.payload))
-
         # want to save or not
         if(self.fileSet=="1"): # from conf.ini
-            self.saveMessage(self.fileName, msg.payload.decode())
+            self.saveMessage(self.fileName, msg.payload)
         elif(self.fileSet=="2"):
-            self.saveMessage(msg.topic.replace(":","").replace("/","_"), msg.payload.decode())
+            self.saveMessage(msg.topic.replace(":","").replace("/","_"), msg.payload)
         elif(self.fileSet=="3"):
-            self.saveMessage(msg.topic.replace(":","").replace("/","_") +"_"+ datetime.date.today().strftime("%Y%m%d"), msg.payload.decode())
+            self.saveMessage(msg.topic.replace(":","").replace("/","_") +"_"+ datetime.date.today().strftime("%Y%m%d"), msg.payload)
 
 
     def start(self):
@@ -79,8 +81,24 @@ class mqttClient:
     def setTopic(self,topic):
         self.topic = topic
 
+    def encodeMessage(self, msg):
+        if(self.sendByte):
+            currenttime = int.from_bytes(msg[0:8], byteorder='big')
+            datasize = int.from_bytes(msg[8:12], byteorder='big')
+            distance = [int.from_bytes(msg[12 + 4 * i:12 + 4 * (i + 1)], byteorder='big') for i in range(int(datasize / 4))]
+            message = str(currenttime)+" "+str(datasize)+" "+str(distance)
+        else:
+            message = msg.decode()
+            if(self.saveTime==1):
+                message=str(time.time())+"\t"+message
+            elif(self.saveTime==2):
+                message=str(datetime.datetime.now().strftime("%H:%M:%S.%f"))+"\t"+message
+
+        print(message)
+        return message
+
     # writing to file
-    def saveMessage(self, fileName, message):
+    def saveMessage(self, fileName, msg):
         #print("save")
         # a for append only
         # a+ for append, read
@@ -92,18 +110,16 @@ class mqttClient:
         self.fileHandler = open((self.fileFolder / (fileName+".txt")).as_posix(),"a+")
         #self.fileHandler = open((fileName+".txt"),"a+")
 
-        if(self.saveTime==1):
-            message=str(time.time())+"\t"+message
-        elif(self.saveTime==2):
-            message=str(datetime.datetime.now().strftime("%H:%M:%S.%f"))+"\t"+message
+        message = self.encodeMessage(msg)
 
         self.fileHandler.write(message+"\n")
         # for printing, can use flush/close too
         #self.fileHandler.flush()
         self.fileHandler.close()
 
-    def checkFile(self,filePath):
 
+
+    def checkFile(self,filePath):
         if(os.path.isfile(filePath)):
             #if more than max file size in MB
             if(os.path.getsize(filePath)>(self.maxFileSize*1024*1024)):
