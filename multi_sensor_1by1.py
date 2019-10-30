@@ -24,7 +24,7 @@ class sensor1by1:
         self.SHUTX_PIN = json.loads(config.config['SENSORS']['SHUTX_PIN'])
         print(self.SHUTX_PIN)
         self.serverStat = int(config.config['MQTT']['SERVER'])
-        self.sensorThreshold = int(config.config['MQTT']['SENSOR_THRESHOLD'])
+        self.sensorThreshold = int(config.config['SENSORS']['SENSOR_THRESHOLD'])
         
         #sending server
         self.server = mqttPublish()
