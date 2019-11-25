@@ -1,33 +1,41 @@
 #ref: https://www.analyticsvidhya.com/blog/2019/01/introduction-time-series-classification/
 import sys
+from utils import readFromCsv, saveToCsv
 sys.path.append('../')
 from tools import tools
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from datetime import datetime
+from time import time
+
 
 class signalprocessing:
     def __init__(self):
-        self.start = datetime.now()
-        self.df = self.readFromCsv("D:\\data\\b827ebc7cc12_1_TOF_20190802.csv")
+        self.dfColumn = ["time", "s1", "s2", "s3", "s4"]
+        self.start = time()
+        self.df = readFromCsv("D:\\data\\b827ebc7cc12_1_TOF_20190802.csv", self.dfColumn)
         self.df = self.df[100000:150000].reset_index(drop=True)
-        self.df = self.df[100:300].reset_index(drop=True)
+        self.df = self.df[43000:44000].reset_index(drop=True)
+
+        print(self.df.describe())
 
         print(self.df.head())
 
         self.showTime()
 
-        self.df = self.generateMean(self.df,25)
-        self.showTime()
+        self.convert(self.df, 5)
 
-        self.plot()
+
+        #self.df = self.generateMean(self.df,25)
+        #self.showTime()
+
+        #self.plot()
 
     def showTime(self):
-        print(datetime.now()-self.start)
-        self.start = datetime.now()
+        print(time()-self.start)
+        self.start = time()
 
-    def plot(self,file):
+    def plot1(self,file):
         read=tools.read(file)
         print (read[0])
         # Plot a section of the waveform.
@@ -39,14 +47,6 @@ class signalprocessing:
         #plt.plot(data1[75000:100000])
         #plt.show()
 
-    def readFromCsv(self, file: str) -> pd.DataFrame:
-        df = pd.read_csv(file, header = None)
-        dfColumn = ["time","s1","s2","s3","s4"]
-        df.columns = dfColumn
-        print(df.head())
-
-        return df
-
     def generateMean(self, df: pd.DataFrame, lag: int) -> pd.DataFrame:
         df["mean"] = 0
         row = df.iloc[:, 0].count()
@@ -54,7 +54,7 @@ class signalprocessing:
         print(row)
         row=10000
         for i in range(row):
-            df.loc[i, "mean"] = df.loc[i:i + lag, "s1"].mean()
+            df.loc[i, "mean"] = df.loc[i:i+lag, "s1"].mean()
         print(df.head())
         return df
 
@@ -62,14 +62,32 @@ class signalprocessing:
         retvaldf = df
         #retvaldf["mean"] = retvaldf["s1"].apply(lambda x: )
 
+    def convert(self, df: pd.DataFrame, lag: int) -> pd.DataFrame:
+        retval = pd.DataFrame(columns=np.arange(lag))
+        row = df.iloc[:, 0].count()
+        row -= lag
+        print(row)
+
+        for i in range(row):
+            temp=df.iloc[i:i+lag,1:5]
+            temp.index=np.arange(lag)
+            retval=retval.append(temp.T, ignore_index=True)
+        print(retval.head())
+        print(retval.describe())
+        return retval
+
     def plot(self):
         plt.figure(figsize=(17, 8))
         plt.plot(self.df.s1)
+        plt.plot(self.df.s2)
+        plt.plot(self.df.s3)
+        plt.plot(self.df.s4)
         plt.title('S1')
         plt.ylabel('distance')
         plt.xlabel('time')
         plt.grid(False)
         plt.show()
+
 
 if __name__ == "__main__":
     p=signalprocessing()
