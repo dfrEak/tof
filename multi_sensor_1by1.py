@@ -31,7 +31,7 @@ class sensor1by1:
 
         #self.SHUTX_PIN_1 = 20
         #self.SHUTX_PIN_2 = 16
-        GPIO.setwarnings(False)\
+        GPIO.setwarnings(False)
 
         # Setup GPIO for shutdown pins on each VL53L0X
         GPIO.setmode(GPIO.BCM)
@@ -80,17 +80,21 @@ class sensor1by1:
         # Start ranging, 1 = Short Range, 2 = Medium Range, 3 = Long Range
         if(self.iPin==0):
             self.start = time.time()
-        self.tof.start_ranging(3)
-        #time1=time.time()-start
-        #start= time.time()
-        distance_in_mm = self.tof.get_distance()
-        #time2=time.time()-start
-        #start= time.time()
-        self.tof.stop_ranging()
-        #time3=time.time()-start
-        #print("sensor on pin: %d\tvalue: %d\tstart: %f\tread: %f\tstop: %f" % (self.pin, distance_in_mm,time1,time2,time3) )
-        #print("sensor on pin: %d\tvalue: %d\ttime: %f" % (self.pin, distance_in_mm,time.time()-start) )
-        
+
+        try:
+            self.tof.start_ranging(3)
+            #time1=time.time()-start
+            #start= time.time()
+            distance_in_mm = self.tof.get_distance()
+            #time2=time.time()-start
+            #start= time.time()
+            self.tof.stop_ranging()
+            #time3=time.time()-start
+            #print("sensor on pin: %d\tvalue: %d\tstart: %f\tread: %f\tstop: %f" % (self.pin, distance_in_mm,time1,time2,time3) )
+            #print("sensor on pin: %d\tvalue: %d\ttime: %f" % (self.pin, distance_in_mm,time.time()-start) )
+        except:
+            distance_in_mm = -1
+            print(str(self.iPin)+" is not connected")
         # add to counter
         result = -1
         '''
