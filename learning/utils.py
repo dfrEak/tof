@@ -8,4 +8,5 @@ def readFromCsv(file: str, dfColumn) -> pd.DataFrame:
 
 def saveToCsv(filename: str, df: pd.DataFrame) -> None:
     print("save to csv")
-    df.to_csv(filename=filename, index=False, encoding="utf-8")
+    print(df.describe())
+    df.to_csv(filename, index=False, encoding="utf-8")

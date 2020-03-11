@@ -11,25 +11,7 @@ from time import time
 
 class signalprocessing:
     def __init__(self):
-        self.dfColumn = ["time", "s1", "s2", "s3", "s4"]
-        self.start = time()
-        self.df = readFromCsv("D:\\data\\b827ebc7cc12_1_TOF_20190802.csv", self.dfColumn)
-        self.df = self.df[100000:150000].reset_index(drop=True)
-        self.df = self.df[43000:44000].reset_index(drop=True)
-
-        print(self.df.describe())
-
-        print(self.df.head())
-
-        self.showTime()
-
-        self.convert(self.df, 5)
-
-
-        #self.df = self.generateMean(self.df,25)
-        #self.showTime()
-
-        #self.plot()
+        pass
 
     def showTime(self):
         print(time()-self.start)
@@ -87,10 +69,35 @@ class signalprocessing:
         plt.xlabel('time')
         plt.grid(False)
         plt.show()
-
+s
 
 if __name__ == "__main__":
     p=signalprocessing()
     #p.plot("D:\\data\\b827ebc7cc12_1_TOF_20190802.txt")
     #print(p.df.head())
+
+    dfColumn = ["time", "s1", "s2", "s3", "s4"]
+    p.start = time()
+    df = readFromCsv("D:\\data\\b827ebc7cc12_1_TOF_20190802.csv", dfColumn)
+    #self.df = readFromCsv("/home/d_freak/Downloads/data/b827ebc7cc12_1_TOF_20190802.csv", self.dfColumn)
+    df = df[100000:150000].reset_index(drop=True)
+    df = df[43000:44000].reset_index(drop=True)
+
+    print(df.describe())
+
+    print(df.head())
+
+    print(df.tail())
+
+    p.showTime()
+
+    df=p.convert(df, 5)
+    #self.df.rename(columns = )
+
+    #saveToCsv("D:\\data\\b827ebc7cc12_1_TOF_20190802_edit.csv",self.df)
+    #saveToCsv("/home/d_freak/Downloads/data/b827ebc7cc12_1_TOF_20190802_edit.csv",self.df)
+    #self.df = self.generateMean(self.df,25)
+    #self.showTime()
+
+    #self.plot()
 
